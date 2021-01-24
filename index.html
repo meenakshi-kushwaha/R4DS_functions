@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Functions</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Meenakshi Kushwaha" />
+    <script src="libs/header-attrs-2.5/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Functions
+## R for Data Science
+### Meenakshi Kushwaha
+### 2021/01/16 (updated: 2021-01-17)
+
+---
+
+# Three Components
+- Arguments| formals
+  - list of arguments
+- Body
+  - code inside the function
+- Environment
+  - data structure that determines how the function finds the   values associated with the names
+  - specified implicitly based on where you define the function
+
+---
+# Good Practices
+- descriptive names, use verbs for function names 
+- use snake case in names
+- be consistent with naming
+- use common prefix for a family of related functions
+
+#### Other tips
+- Use comments for #why. Could should explan the #how
+- Use short cut (Cmd/Ctrl + Shift + R) to add sections to code
+
+```r
+# Load data --------------------------------------
+
+# Plot data --------------------------------------
+```
+
+---
+# Conditional statements
+
+---
+#Argument Matching
+- Complete names
+- Partial names
+  - if uniquley identifies the argument
+- Position
+- Using dots
+
+---
+# Return Values
+A function usually returns the last statement it evaluates
+--
+
+.pull-left[
+#### Explicit return
+` ifelse ` statemetn with complex operations
+
+```r
+f &lt;- function() {
+  if (!x) {
+    return(something_short)
+  }
+
+  # Do 
+  # something
+  # that
+  # takes
+  # many
+  # lines
+}
+```
+
+]
+
+--
+
+.pull-right[
+####Pipeable functions
+
+- Transformations
+  - passed object is transformed
+- Side effects
+  - action is performed on passed object
+  - like drawing a plot, saving a file
+]
+---
+# Environments
+- An environment is a list of name-value pairs that define the values of R objects
+- Each environment contains a link to a parent environment (with the exception of the empty environment).
+- Each environment is linked to the empty environment by a chain of parent environments.
+- Every object in R is stored in an environment
+
+---
+# Scoping Rules
+####Rules that R/any language uses to look up values
+The chain of parent environments from the active environment to the empty environment creates a search path that R uses to look for objects.
+
+- R first looks for objects in the current active environment.
+
+- R then looks in the parent of the parent, and so on until R finds the object or comes to the empty environment.
+
+- If R gets to the empty environment before it finds an object, R will return the familiar error message: Error: object not found.
+
+*The search path will depend on packages you have loaded. The environments of loaded packages appear between the global environment and the empty environment in the reverse order of which the packages were loaded.*
+
+---
+# Over writing and Masking
+
+- Overwriting happens when you assign a new value to a name that already exists in the active environment, replacing the old value.
+
+- Masking happens when you create an object that has the same name as an object further down the search path, hiding the object. Use :: to avoid masking
+---
+# Function Rules
+When you call a function, R executes the code that is saved in the body of the function. To execute that code safely:
+
+R creates a fresh environment to run the code in. I’ll call this environment the execution environment.
+
+R sets the parent of the execution environment to the function’s enclosing environment, which is the environment where the function was first defined. This ensures that the function will use the same, predictable search path each time that it runs.
+
+When R finishes running the function, R returns the result to the calling environment, which is the environment that was active when the function was called. R also makes the calling environment the active environment again, which removes the execution environment from the search path.
+
+---
+# The Call Stack
+Since one R function can call another R function, an execution environment can become the calling environment for a second execution environment. If the second function calls a third function, then the second execution environment would become the calling environment for a third execution environment, and so on.
+
+These chains of calling environments are known as the call stack.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

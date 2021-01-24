@@ -1,0 +1,142 @@
+---
+title: "Functions"
+subtitle: "R for Data Science"
+author: "Meenakshi Kushwaha"
+date: "2021/01/16 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+# Three Components
+- Arguments| formals
+  - list of arguments
+- Body
+  - code inside the function
+- Environment
+  - data structure that determines how the function finds the   values associated with the names
+  - specified implicitly based on where you define the function
+
+---
+# Good Practices
+- descriptive names, use verbs for function names 
+- use snake case in names
+- be consistent with naming
+- use common prefix for a family of related functions
+
+#### Other tips
+- Use comments for #why. Could should explan the #how
+- Use short cut (Cmd/Ctrl + Shift + R) to add sections to code
+```{r}
+# Load data --------------------------------------
+
+# Plot data --------------------------------------
+```
+
+---
+# Conditional statements
+
+```{r}
+if (condition) {
+  # code executed when condition is TRUE
+} else {
+  # code executed when condition is FALSE
+}
+```
+
+- The condition must evaluate to `TRUE` or `FALSE`
+- Can use `||` or `&&` to combine multiple expressions
+- Note that  `|` and `&` are vectorized 
+  - Used in `filter()`
+- Multiple conditions can be chained together using `elseif`  
+
+---
+#Argument Matching
+- Complete names
+- Partial names
+  - if uniquley identifies the argument
+- Position
+- Using dots
+
+---
+# Return Values
+A function usually returns the last statement it evaluates
+--
+
+.pull-left[
+#### Explicit return
+` ifelse ` statemetn with complex operations
+```{r}
+
+f <- function() {
+  if (!x) {
+    return(something_short)
+  }
+
+  # Do 
+  # something
+  # that
+  # takes
+  # many
+  # lines
+}
+```
+
+]
+
+--
+
+.pull-right[
+####Pipeable functions
+
+- Transformations
+  - passed object is transformed
+- Side effects
+  - action is performed on passed object
+  - like drawing a plot, saving a file
+]
+---
+# Environments
+- An environment is a list of name-value pairs that define the values of R objects
+- Each environment contains a link to a parent environment (with the exception of the empty environment).
+- Each environment is linked to the empty environment by a chain of parent environments.
+- Every object in R is stored in an environment
+
+---
+# Scoping Rules
+####Rules that R/any language uses to look up values
+The chain of parent environments from the active environment to the empty environment creates a search path that R uses to look for objects.
+
+- R first looks for objects in the current active environment.
+
+- R then looks in the parent of the parent, and so on until R finds the object or comes to the empty environment.
+
+- If R gets to the empty environment before it finds an object, R will return the familiar error message: Error: object not found.
+
+*The search path will depend on packages you have loaded. The environments of loaded packages appear between the global environment and the empty environment in the reverse order of which the packages were loaded.*
+
+---
+# Over writing and Masking
+
+- Overwriting happens when you assign a new value to a name that already exists in the active environment, replacing the old value.
+
+- Masking happens when you create an object that has the same name as an object further down the search path, hiding the object. Use :: to avoid masking
+---
+# Function Rules
+When we call a function, R executes the code that is saved in the body of the function. To execute that code safely:
+
+- R creates a fresh environment to run the code in. This is the **execution environment**.
+
+- R sets the **parent** of the execution environment to the function’s enclosing environment, which is the environment where the function was first defined. This ensures that the function will use the same, predictable search path each time that it runs.
+
+- When R finishes running the function, R returns the result to the **calling environment**, which is the environment that was active when the function was called. R also makes the calling environment the active environment again, which removes the execution environment from the search path.
+
+---
+# The Call Stack
+- Since one R function can call another R function, an execution environment can become the calling environment for a second execution environment. 
+- If the second function calls a third function, then the second execution environment would become the calling environment for a third execution environment, and so on.
+
+**These chains of calling environments are known as the call stack**
